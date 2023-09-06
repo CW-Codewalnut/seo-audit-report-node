@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express');
+const axios = require('axios');
 const puppeteer = require('puppeteer');
 const Handlebars = require('handlebars');
 // const response = require('./response');
@@ -76,15 +77,27 @@ function getValue(score) {
 }
 
 async function generatePDF(param1) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+      headless: true, 
+      devtools: false,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
   const page = await browser.newPage();
   const apiToken = "patGQPJKwuQOVMt7e.daf4863d4e9da202d66a6756e14c6973131544dc28ecc3b6f2874ee97b83dfc1";
-  const apiResponse = await fetch(`https://api.airtable.com/v0/appudPAXLHOQqak1d/${param1}`, {
-    headers: {
-      Authorization: `Bearer ${apiToken}`
-    }
-  });
-  const response = await apiResponse.json();
+  // const apiResponse = await fetch(`https://api.airtable.com/v0/appudPAXLHOQqak1d/${param1}`, {
+  //   headers: {
+  //     Authorization: `Bearer ${apiToken}`
+  //   }
+  // });
+
+  const apiResponse = await axios.get(`https://api.airtable.com/v0/appudPAXLHOQqak1d/${param1}`, {
+  headers: {
+    Authorization: `Bearer ${apiToken}`
+  }
+});
+const response = apiResponse.data;
+
+  // const response = await apiResponse.json();
 
   const companyRecord = response.records.find(item => item.fields.Tags.includes('CompanyName'));
   const {
@@ -134,7 +147,7 @@ async function generatePDF(param1) {
     item.fields[scores[2].name + 'BgColor'] = bgColor[scores[2].value];
   });
 
-  const overallPerformance = response.records.find(item => item.fields.Name === "Overall Perormance");
+  const overallPerformance = response.records.find(item => item.fields.Name === "Overall Performance");
 
   const dataMapping = {
     "Set up": "setUpData",
