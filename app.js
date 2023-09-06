@@ -78,7 +78,7 @@ function getValue(score) {
 
 async function generatePDF(param1) {
   const browser = await puppeteer.launch({
-      headless: true, 
+      headless: 'new', 
       devtools: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
