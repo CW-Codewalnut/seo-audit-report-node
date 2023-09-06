@@ -157,7 +157,7 @@ const response = apiResponse.data;
 
   const data = {
     title: "Website health scorecard",
-    website: `www.${companyOneName}.com`,
+    website: companyOneName,
     companyOneName,
     companyTwoName,
     companyThreeName,
