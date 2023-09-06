@@ -84,11 +84,6 @@ async function generatePDF(param1) {
     });
   const page = await browser.newPage();
   const apiToken = "patGQPJKwuQOVMt7e.daf4863d4e9da202d66a6756e14c6973131544dc28ecc3b6f2874ee97b83dfc1";
-  // const apiResponse = await fetch(`https://api.airtable.com/v0/appudPAXLHOQqak1d/${param1}`, {
-  //   headers: {
-  //     Authorization: `Bearer ${apiToken}`
-  //   }
-  // });
 
   const apiResponse = await axios.get(`https://api.airtable.com/v0/appudPAXLHOQqak1d/${param1}`, {
   headers: {
@@ -169,9 +164,18 @@ const response = apiResponse.data;
     overallPerformance: overallPerformance
   };
 
-  for (const [tag, propName] of Object.entries(dataMapping)) {
-    data[propName] = response.records.filter(item => item.fields.Name && item.fields.Tags.includes(tag));
-  }
+  response.records.sort((a, b) => {
+    const isMatchA = a.fields.Name && a.fields.Tags.includes(a.fields.Name);
+    const isMatchB = b.fields.Name && b.fields.Tags.includes(b.fields.Name);
+
+    if (isMatchA && !isMatchB) return -1;  // a comes first
+    if (!isMatchA && isMatchB) return 1;   // b comes first
+    return 0;  // keep original order for other cases
+});
+
+for (const [tag, propName] of Object.entries(dataMapping)) {
+  data[propName] = response.records.filter(item => item.fields.Name && item.fields.Tags.includes(tag));
+}
 
   const templateContent = fs.readFileSync(__dirname + '/template.handlebars', 'utf8');
   const template = Handlebars.compile(templateContent);
