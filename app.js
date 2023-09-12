@@ -37,25 +37,36 @@ function formatNumber(value) {
   }
   return value.toString();
 }
+function determineColor(scores) {
+  const uniqueSortedValues = [...new Set(scores)].sort((a, b) => b - a); // Sort unique values in descending order
 
-function determineColor(values) {
-  const uniqueSortedValues = [...new Set(values)].sort((a, b) => b - a); // Sort unique values in descending order
+  let textColor = {};
+  let bgColor = {};
 
-  const textColor = {
-    [uniqueSortedValues[0] || 0]: 'rgb(120, 195, 23)',
-    [uniqueSortedValues[1] || 0]: 'rgb(255, 190, 0)',
-    [uniqueSortedValues[2] || 0]: 'rgb(221, 21, 59)'
-  };
+  // For one value, no comparison needed
+  if (uniqueSortedValues.length === 1) {
+      textColor[uniqueSortedValues[0] || 0] = 'rgb(120, 195, 23)';
+      bgColor[uniqueSortedValues[0] || 0] = 'rgb(230, 245, 210)';
+  } else if(uniqueSortedValues.length === 2) {
+      // For two or more values, use the two colors
+      textColor[uniqueSortedValues[0] || 0] = 'rgb(120, 195, 23)';
+      bgColor[uniqueSortedValues[0] || 0] = 'rgb(230, 245, 210)';
 
-  const bgColor = {
-    [uniqueSortedValues[0] || 0]: 'rgb(230, 245, 210)',
-    [uniqueSortedValues[1] || 0]: 'rgb(255, 247, 222)',
-    [uniqueSortedValues[2] || 0]: 'rgb(255, 204, 214)'
-  };
+      textColor[uniqueSortedValues[1] || 0] = 'rgb(221, 21, 59)';
+      bgColor[uniqueSortedValues[1] || 0] = 'rgb(255, 204, 214)';
+  } else {
+    textColor[uniqueSortedValues[0] || 0] = 'rgb(120, 195, 23)',
+    textColor[uniqueSortedValues[1] || 0] = 'rgb(255, 190, 0)',
+    textColor[uniqueSortedValues[2] || 0] = 'rgb(221, 21, 59)'
+
+    bgColor[uniqueSortedValues[0] || 0] = 'rgb(230, 245, 210)',
+    bgColor[uniqueSortedValues[1] || 0] = 'rgb(255, 247, 222)',
+    bgColor[uniqueSortedValues[2] || 0] = 'rgb(255, 204, 214)'
+  }
 
   return {
-    textColor,
-    bgColor
+      textColor,
+      bgColor
   };
 }
 
@@ -103,44 +114,47 @@ const response = apiResponse.data;
 
   response.records.forEach(item => {
     const {
-      yourScore,
-      yourCompiteiter1,
-      yourCompiteiter2
+        yourScore,
+        yourCompiteiter1,
+        yourCompiteiter2
     } = item.fields;
 
-    const scores = [{
-        name: 'yourScore',
-        value: getValue(yourScore)
-      },
-      {
-        name: 'yourCompiteiter1',
-        value: getValue(yourCompiteiter1)
-      },
-      {
-        name: 'yourCompiteiter2',
-        value: getValue(yourCompiteiter2)
-      }
-    ];
+    let scores = [];
+
+    if (yourScore !== undefined) {
+        scores.push({
+            name: 'yourScore',
+            value: getValue(yourScore)
+        });
+    }
+
+    if (yourCompiteiter1 !== undefined) {
+        scores.push({
+            name: 'yourCompiteiter1',
+            value: getValue(yourCompiteiter1)
+        });
+    }
+
+    if (yourCompiteiter2 !== undefined) {
+        scores.push({
+            name: 'yourCompiteiter2',
+            value: getValue(yourCompiteiter2)
+        });
+    }
 
     const {
-      textColor,
-      bgColor
+        textColor,
+        bgColor
     } = determineColor(scores.map(s => s.value));
 
     scores.sort((a, b) => b.value - a.value);
 
-    item.fields[scores[0].name] = formatNumber(scores[0].value);
-    item.fields[scores[0].name + 'Color'] = textColor[scores[0].value];
-    item.fields[scores[0].name + 'BgColor'] = bgColor[scores[0].value];
-
-    item.fields[scores[1].name] = formatNumber(scores[1].value);
-    item.fields[scores[1].name + 'Color'] = textColor[scores[1].value];
-    item.fields[scores[1].name + 'BgColor'] = bgColor[scores[1].value];
-
-    item.fields[scores[2].name] = formatNumber(scores[2].value);
-    item.fields[scores[2].name + 'Color'] = textColor[scores[2].value];
-    item.fields[scores[2].name + 'BgColor'] = bgColor[scores[2].value];
-  });
+    scores.forEach((score, index) => {
+        item.fields[score.name] = formatNumber(score.value);
+        item.fields[score.name + 'Color'] = textColor[score.value];
+        item.fields[score.name + 'BgColor'] = bgColor[score.value];
+    });
+});
 
   const overallPerformance = response.records.find(item => item.fields.Name === "Overall Performance");
 
@@ -155,13 +169,24 @@ const response = apiResponse.data;
     "Social Proofing": "socialProofingData"
   };
 
+  const totalWidth = (() => {
+    if (companyOneName && companyTwoName && companyThreeName) {
+        return '20%';
+    } else if (companyOneName && companyTwoName) {
+        return '30%';
+    } else {
+        return '60%';
+    }
+})();
+
   const data = {
     title: "Website health scorecard",
     website: companyOneName,
     companyOneName,
     companyTwoName,
     companyThreeName,
-    overallPerformance: overallPerformance
+    overallPerformance: overallPerformance,
+    totalWidth: totalWidth
   };
 
   response.records.sort((a, b) => {

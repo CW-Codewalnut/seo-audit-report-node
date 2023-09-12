@@ -6,7 +6,7 @@
     <title>PDF Generation</title>
     <style>
       body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif;
-      background-color: #e9f0f5; } table { width: 100%; border-collapse:
+      background-color: #e9f0f5; box-sizing: border-box; } table { width: 100%; border-collapse:
       collapse; } th, td { padding: 8px; text-align: left; border:2px solid white; } .main-banner{
       background-image: url('./images/bannerimage.png'); }
     </style>
@@ -29,12 +29,16 @@
       <div
         style="background-color:white; margin:0 auto; width:80%; border-top: 5px solid #78c317;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius: 0 0 20px 20px;"
       >
-        <table>
-          <tr>
-            <th></th>
-            <th style="text-align:center">{{companyOneName}}</th>
-            <th style="text-align:center">{{companyTwoName}}</th>
-            <th style="text-align:center">{{companyThreeName}}</th>
+        <table style="table-layout: fixed;">
+          <tr style="width: 100%">
+            <th style="width: 40%;"></th>
+            <th style="flex: 1; text-align:center">{{companyOneName}}</th>
+            {{#if companyTwoName}}
+            <th style="flex: 1; text-align:center">{{companyTwoName}}</th>
+            {{/if}}
+            {{#if companyThreeName}}
+            <th style="flex: 1; text-align:center">{{companyThreeName}}</th>
+            {{/if}}
           </tr>
 
           <tr>
@@ -42,13 +46,17 @@
             <td
               style="background-color: {{overallPerformance.fields.yourScoreColor}}; color:white; text-align: center; font-weight:600"
             >{{overallPerformance.fields.yourScore}}</td>
+            {{#if overallPerformance.fields.yourCompiteiter1}}
             <td
               style="background-color: {{overallPerformance.fields.yourCompiteiter1Color}}; color:white; text-align: center; font-weight:600"
             >{{overallPerformance.fields.yourCompiteiter1}}</td>
+            {{/if}}
+            {{#if overallPerformance.fields.yourCompiteiter2}}
             <td
               style="background-color: {{overallPerformance.fields.yourCompiteiter2Color}}; color:white; text-align: center; font-weight:600"
             >{{overallPerformance.fields.yourCompiteiter2}}</td>
           </tr>
+          {{/if}}
         </table>
       </div>
 
@@ -58,15 +66,19 @@
       style="background-color:white; margin:50px auto 0 auto; width:80%; border-top: 5px solid #78c317;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius: 0 0 20px 20px;"
     >
       <h2 style="color: #0f2a3d; font-size: 25px; font-weight: 600; margin:0 0 30px 0">SEO Scorecard</h2>
-      <table>
+      <table style="table-layout: fixed;" >
         {{#each setUpData}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
             <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
@@ -75,26 +87,34 @@
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
                 style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
             </tr>
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
 
-      <table style="margin-top:15px">
+      <table style="table-layout: fixed; margin-top:15px">
         {{#each webEngagementData}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
-            <tr style="width: 100%">
+             <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
@@ -103,26 +123,34 @@
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
                 style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
             </tr>
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
 
-      <table style="margin-top:15px">
+      <table style="table-layout: fixed; margin-top:15px">
         {{#each metaDataCompliance}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
             <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
@@ -131,54 +159,70 @@
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
-                style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}};text-align: center; font-weight:600"
+                style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
-            </tr>
+            </tr> 
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
 
-      <table style="margin-top:15px">
+      <table style="table-layout: fixed; margin-top:15px">
         {{#each backlinkProfileData}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
             <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
-            <tr>
+           <tr>
               <td style="background-color: rgb(233, 240, 245); color: rgb(15, 42, 61);">{{this.fields.Name}}</td>
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
                 style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
             </tr>
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
 
-      <table style="margin-top:15px">
+      <table style="table-layout: fixed; margin-top:15px">
         {{#each performanceScoreData}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
             <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
@@ -187,26 +231,34 @@
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
                 style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
             </tr>
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
 
-      <table style="margin-top:15px">
+      <table style="table-layout: fixed; margin-top:15px">
         {{#each usabilityData}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
-            <tr style="width: 100%">
+           <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
@@ -215,26 +267,34 @@
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
                 style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
             </tr>
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
 
-      <table style="margin-top:15px">
+      <table style="table-layout: fixed; margin-top:15px">
         {{#each trustData}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
-            <tr style="width: 100%">
+           <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
@@ -243,26 +303,34 @@
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
                 style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
             </tr>
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
 
-      <table style="margin-top:15px">
+      <table style="table-layout: fixed; margin-top:15px">
         {{#each socialProofingData}}
           {{#if @first}}
             <!-- Check if it's the first item in the array -->
-            <tr style="width: 100%">
+           <tr style="width: 100%">
               <th style="width: 40%; background-color: rgb(15, 42, 61); color:white">{{this.fields.Name}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              <th style="flex: 1; background-color: {{this.fields.yourScoreColor}}; color:white; text-align: center;" >{{this.fields.yourScore}}</th>
+              {{#if this.fields.yourCompiteiter1}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter1Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter1}}</th>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
+              <th style="flex: 1; background-color: {{this.fields.yourCompiteiter2Color}}; color:white; text-align: center;">{{this.fields.yourCompiteiter2}}</th>
+              {{/if}}
             </tr>
           {{else}}
             <!-- Render the rest of the items as regular table rows -->
@@ -271,13 +339,17 @@
               <td
                 style="color: {{this.fields.yourScoreColor}}; background-color: {{this.fields.yourScoreBgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourScore}}</td>
+               {{#if this.fields.yourCompiteiter1}}
               <td
                 style="color: {{this.fields.yourCompiteiter1Color}}; background-color: {{this.fields.yourCompiteiter1BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter1}}</td>
+              {{/if}}
+              {{#if this.fields.yourCompiteiter2}}
               <td
                 style="color: {{this.fields.yourCompiteiter2Color}}; background-color: {{this.fields.yourCompiteiter2BgColor}}; text-align: center; font-weight:600"
               >{{this.fields.yourCompiteiter2}}</td>
             </tr>
+            {{/if}}
           {{/if}}
         {{/each}}
       </table>
@@ -286,7 +358,7 @@
         style="background-color:white; margin:100px auto 50px auto; width:80%;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius:20px; page-break-inside: avoid;"
       >
       <h2 style="color: #0f2a3d; font-size: 22px; font-weight: 600; margin:0 0 30px 0">There are some more critical, technical SEO elements which can only be assessed with GA4 and GSC access.</h2>
-      <table>
+      <table style="table-layout: fixed;">
         <tr style="background-color: #0f2a3d; color: white; font-size:20px; font-weight:600">
           <th colspan="3">Technical compliance</th>
         </tr>
