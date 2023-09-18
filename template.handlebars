@@ -17,6 +17,7 @@
     <div style="background-image:url('https://uploads-ssl.webflow.com/64ec4a31ac0e06c538ed737c/64ec4a31ac0e06c538ed73ef_enterprise-SEO-bg.webp'); height: auto; width: 100%; border-radius: 0 0 50px 50px; padding:50px 0 50px 0; background-size: cover;" >
       <h1 style="color:#fff; text-align: center; font-size: 40px; margin:0; font-weight: 900;">Website health scorecard</h1>
       <h2 style="color: #78c317; font-size: 25px; text-align: center; font-weight: 900;">{{companyRecord.fields.yourScore}}</h2>
+      {{#if companyRecord.fields.yourCompiteiter1}}
       <div style="background-color:white; margin:0 auto; width:80%; border-top: 5px solid #78c317;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius: 0 0 20px 20px;">
         <table style="table-layout: fixed;">
           <tr style="width: 100%">
@@ -52,6 +53,7 @@
           </tr>
         </table>
       </div>
+      {{/if}}
     </div>
 
     <div style="background-color:white; margin:50px auto 0 auto; width:80%; border-top: 5px solid #78c317;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius: 0 0 20px 20px;">
