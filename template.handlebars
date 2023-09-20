@@ -17,45 +17,27 @@
     <div style="background-image:url('https://uploads-ssl.webflow.com/64ec4a31ac0e06c538ed737c/64ec4a31ac0e06c538ed73ef_enterprise-SEO-bg.webp'); height: auto; width: 100%; border-radius: 0 0 50px 50px; padding:50px 0 50px 0; background-size: cover;" >
       <h1 style="color:#fff; text-align: center; font-size: 40px; margin:0; font-weight: 900;">Website health scorecard</h1>
       <h2 style="color: #78c317; font-size: 25px; text-align: center; font-weight: 900;">{{companyRecord.fields.yourScore}}</h2>
-      <div style="background-color:white; margin:0 auto; width:80%; border-top: 5px solid #78c317;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius: 0 0 20px 20px;">
-        <table style="table-layout: fixed;">
-          <tr style="width: 100%">
-            <th style="width: 40%;"></th>
-            {{#if companyRecord.fields.yourCompiteiter2}}
-              <th style="text-align:center">{{companyRecord.fields.yourScore}}</th>
-              <th style="text-align:center">{{companyRecord.fields.yourCompiteiter1}}</th>
-              <th style="text-align:center">{{companyRecord.fields.yourCompiteiter2}}</th>
-            {{else}}
-              {{#if companyRecord.fields.yourCompiteiter1}}
-                <th style="text-align:center">{{companyRecord.fields.yourScore}}</th>
-                <th style="text-align:center">{{companyRecord.fields.yourCompiteiter1}}</th>
-              {{else}}
-                <th style="text-align:center">{{companyRecord.fields.yourScore}}</th>
-              {{/if}}           
-            {{/if}}    
-          </tr>
-
-          <tr style="width: 100%">
-            <td style="width: 40%; background-color: rgb(15, 42, 61); color:white; font-weight:600">{{overallPerformance.fields.Name}}</td>
-            {{#if overallPerformance.fields.yourCompiteiter2}}
-              <th style="width: 20%; text-align:center; color: {{overallPerformance.fields.yourScoreTextColor}}; background-color: {{overallPerformance.fields.yourScoreBgColor}}; ">{{overallPerformance.fields.yourScore}}</th>
-              <th style="width: 20%; text-align:center; color: {{overallPerformance.fields.yourCompiteiter1TextColor}}; background-color: {{overallPerformance.fields.yourCompiteiter1BgColor}};">{{overallPerformance.fields.yourCompiteiter1}}</th>
-              <th style="width: 20%; text-align:center; color: {{overallPerformance.fields.yourCompiteiter2TextColor}}; background-color: {{overallPerformance.fields.yourCompiteiter2BgColor}};">{{overallPerformance.fields.yourCompiteiter2}}</th>
-            {{else}}
-                {{#if overallPerformance.fields.yourCompiteiter1}}
-                  <th style="width: 30%; text-align:center; color: {{overallPerformance.fields.yourScoreTextColor}}; background-color: {{overallPerformance.fields.yourScoreBgColor}}; ">{{overallPerformance.fields.yourScore}}</th>
-                  <th style="width: 30%; text-align:center; color: {{overallPerformance.fields.yourCompiteiter1TextColor}}; background-color: {{overallPerformance.fields.yourCompiteiter1BgColor}};">{{overallPerformance.fields.yourCompiteiter1}}</th>
-                {{else}}
-                  <th style="width: 60%; text-align:center; color: {{overallPerformance.fields.yourScoreTextColor}}; background-color: {{overallPerformance.fields.yourScoreBgColor}}; ">{{overallPerformance.fields.yourScore}}</th>
-                {{/if}}
-            {{/if}}
-          </tr>
-        </table>
-      </div>
+      
     </div>
-
-    <div style="background-color:white; margin:50px auto 0 auto; width:80%; border-top: 5px solid #78c317;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius: 0 0 20px 20px;">
-    <h2 style="color: #0f2a3d; font-size: 25px; font-weight: 600; margin:0 0 30px 0">SEO Scorecard</h2>
+<div style="background-color:white; margin:-40px auto 0 auto; width:80%; border-top: 5px solid #78c317;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius: 0 0 20px 20px;">
+    <h2 style="color: #0f2a3d; font-size: 25px; font-weight: 600; margin:0">SEO Scorecard</h2>
+    <table style="margin: 0 0 -30px 0;">
+      <tr>
+        <th style="width: 40%;"></th>
+        {{#if companyRecord.fields.yourCompiteiter2}}
+          <th style="text-align: center;">{{companyRecord.fields.yourScore}}</th>
+          <th style="text-align: center;">{{companyRecord.fields.yourCompiteiter1}}</th>
+          <th style="text-align: center;">{{companyRecord.fields.yourCompiteiter2}}</th>
+        {{else}}
+          {{#if companyRecord.fields.yourCompiteiter1}}
+            <th style="text-align: center;">{{companyRecord.fields.yourScore}}</th>
+            <th style="text-align: center;">{{companyRecord.fields.yourCompiteiter1}}</th>
+          {{else}}
+            <th style="text-align: center;">{{companyRecord.fields.yourScore}}</th>
+          {{/if}}
+        {{/if}}
+      </tr>
+    </table>
     {{#each tableData}}
       <table style="margin-top:30px">
           <!-- Totals Row -->
@@ -93,6 +75,7 @@
       </table>
     {{/each}}
     </div>
+    
     <div
         style="background-color:white; margin:100px auto 30px auto; width:80%;  padding: 2.25rem; box-shadow: 0 5px 10px rgba(90, 111, 125, 0.15); border-radius:20px; page-break-inside: avoid;"
       >

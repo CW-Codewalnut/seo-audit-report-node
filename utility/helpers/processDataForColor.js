@@ -1,193 +1,96 @@
 const preprocessDataForColors = (data, type='body') => {
-    const getHeaderColorMapping = (values) => {
-        const filteredValues = values.filter(v => v !== undefined && v !== null);
-        if (filteredValues.length === 0) {
-            
-            return {
-                [filteredValues[0]]: {
-                    textColor: '#fff',
-                    bgColor: 'rgb(15, 42, 61)'
-                }
-            };
-        }
+    // const getHeaderColorMapping = (values) => {
+    //     const filteredValues = values.filter(v => v !== undefined && v !== null);
+    //     const uniqueValues = [...new Set(filteredValues)];
+    //     const colorMapping = uniqueValues.reduce((acc, value) => {
+    //     })
 
-        if (filteredValues.length === 2) {
-            const maxVal = Math.max(...filteredValues);
-            const minVal = Math.min(...filteredValues);
-            return {
-                [maxVal]: {
-                    textColor: '#fff',
-                    bgColor: 'rgb(120, 195, 23)'
-                },
-                [minVal]: {
-                    textColor: '#fff',
-                    bgColor: 'rgb(221, 21, 59)'
-                }
-            };
-        }
+    //     return colorMapping;
 
-        const uniqueSortedValues = values.sort((a, b) => b - a);
-        return {
-            [uniqueSortedValues[0] || 0]: {
-                textColor: '#fff',
-                bgColor: 'rgb(120, 195, 23)'
-            },
-            [uniqueSortedValues[1] || 0]: {
-                textColor: '#fff',
-                bgColor: 'rgb(255, 190, 0)'
-            },
-            [uniqueSortedValues[2] || 0]: {
-                textColor: '#fff',
-                bgColor: 'rgb(221, 21, 59)'
-            }
-        };
-    }
+    // }
   
     const getBodyColorMapping = (values, fieldName="") => {
         const filteredValues = values.filter(v => v !== undefined && v !== null);
-
-        if (filteredValues.length === 1) {
-            if(filteredValues[0] === 'Partial' || filteredValues[0] === 'partial'){
-                return {
-                    [filteredValues[0]]: {
-                        textColor: 'rgb(255, 190, 0)',
-                        bgColor: 'rgb(255, 247, 222)'
-                    }
-                }; 
-            } else if(filteredValues[0] === 'No' || filteredValues[0] === 'no'){
-                return {
-                    [filteredValues[0]]: {
-                        textColor: 'rgb(221, 21, 59)',
-                        bgColor: 'rgb(255, 204, 214)'
-                    }
-                }; 
-            } else if(filteredValues[0] === 'Yes' || filteredValues[0] === 'yes'){
-                return {
-                    [filteredValues[0]]: {
-                        textColor: 'rgb(120, 195, 23)',
-                        bgColor: 'rgb(230, 245, 210)'
-                    }
-                }; 
-            }else if(fieldName === '# Broken backlinks'){
-                if(filteredValues[0] >= 100){
-                    return {
-                        [filteredValues[0]]: {
-                            textColor: 'rgb(221, 21, 59)',
-                            bgColor: 'rgb(255, 204, 214)'
-                        }
-                    }; 
-                }
+        const uniqueValues = [...new Set(filteredValues)];
+        const colorMapping = uniqueValues.reduce((acc, value) => {
+            console.log({value});
+            if (value === 'Partial') {
+                acc[value] = {
+                    textColor: 'rgb(255, 190, 0)',
+                    bgColor: 'rgb(255, 247, 222)'
+                };
+            } else if(value === 'Yes') {
+                acc[value] = {
+                    textColor: 'rgb(120, 195, 23)',
+                    bgColor: 'rgb(230, 245, 210)'
+                };
+            } else if(value === 'No'){
+                acc[value] = {
+                    textColor: 'rgb(221, 21, 59)',
+                    bgColor: 'rgb(255, 204, 214)'
+                };
             } else if(fieldName === 'Mobile score'){
-                if(filteredValues[0] < 30){
-                    return {
-                        [filteredValues[0]]: {
+                if(value < 30){
+                        acc[value]= {
                             textColor: 'rgb(221, 21, 59)',
                             bgColor: 'rgb(255, 204, 214)'
                         }
-                    }; 
-                } else if(filteredValues[0] >= 30 && filteredValues[0]<=70){
-                    return {
-                        [filteredValues[0]]: {
+                } else if(value >= 30 && value<=70){
+                        acc[value]= {
                             textColor: 'rgb(255, 190, 0)',
                             bgColor: 'rgb(255, 247, 222)'
-                        }
-                    }; 
+                    }
                 } else {
-                    return {
-                        [filteredValues[0]]: {
+                        acc[value]= {
                             textColor: 'rgb(120, 195, 23)',
                             bgColor: 'rgb(230, 245, 210)'
-                        }
-                    }; 
+                    } 
                 }
             } else if(fieldName === 'Desktop score'){
-                if(filteredValues[0] < 30){
-                    return {
-                        [filteredValues[0]]: {
+                if(value < 30){
+                        acc[value]= {
                             textColor: 'rgb(221, 21, 59)',
                             bgColor: 'rgb(255, 204, 214)'
                         }
-                    }; 
-                } else if(filteredValues[0] >= 30 && filteredValues[0]<=80){
-                    return {
-                        [filteredValues[0]]: {
+                } else if(value >= 30 && value<=80){
+                        acc[value]= {
                             textColor: 'rgb(255, 190, 0)',
                             bgColor: 'rgb(255, 247, 222)'
                         }
-                    }; 
                 } else {
-                    return {
-                        [filteredValues[0]]: {
+                        acc[value]= {
                             textColor: 'rgb(120, 195, 23)',
                             bgColor: 'rgb(230, 245, 210)'
                         }
-                    }; 
                 }
             } else if(fieldName === 'Accessibility'){
-                if(filteredValues[0] < 70){
-                    return {
-                        [filteredValues[0]]: {
+                if(value < 70){
+                        acc[value]= {
                             textColor: 'rgb(221, 21, 59)',
                             bgColor: 'rgb(255, 204, 214)'
                         }
-                    }; 
-                } else if(filteredValues[0] >= 70 && filteredValues[0]<=90){
-                    return {
-                        [filteredValues[0]]: {
+                } else if(value >= 70 && value<=90){
+                        acc[value]= {
                             textColor: 'rgb(255, 190, 0)',
                             bgColor: 'rgb(255, 247, 222)'
                         }
-                    }; 
                 } else {
-                    return {
-                        [filteredValues[0]]: {
+                        acc[value]= {
                             textColor: 'rgb(120, 195, 23)',
                             bgColor: 'rgb(230, 245, 210)'
                         }
-                    }; 
                 }
-            } 
-            
-            return {
-                [filteredValues[0]]: {
+            } else {
+                acc[value]= {
                     textColor: 'rgb(0, 0, 0)',
                     bgColor: 'rgb(233, 240, 245)'
                 }
-            };
-           
-        }
-
-        if (filteredValues.length === 2) {
-            const maxVal = Math.max(...filteredValues);
-            const minVal = Math.min(...filteredValues);
-            return {
-                [maxVal]: {
-                    textColor: 'rgb(120, 195, 23)',
-                    bgColor: 'rgb(230, 245, 210)'
-                },
-                [minVal]: {
-                    textColor: 'rgb(221, 21, 59)',
-                    bgColor: 'rgb(255, 204, 214)'
-                }
-            };
-        }
-
-        const uniqueSortedValues = values.sort((a, b) => b - a);
-
-        return {
-            [uniqueSortedValues[0] || 0]: {
-                textColor: 'rgb(120, 195, 23)',
-                bgColor: 'rgb(230, 245, 210)'
-            },
-            [uniqueSortedValues[1] || 0]: {
-                textColor: 'rgb(255, 190, 0)',
-                bgColor: 'rgb(255, 247, 222)'
-            },
-            [uniqueSortedValues[2] || 0]: {
-                textColor: 'rgb(221, 21, 59)',
-                bgColor: 'rgb(255, 204, 214)'
             }
-        };
+            
+            return acc;
+        }, {});
+
+        return colorMapping;
     };
     if (type === 'tableData') {
         Object.keys(data).forEach(key => {
@@ -195,13 +98,12 @@ const preprocessDataForColors = (data, type='body') => {
             const details = data[key].details;
             
             // Process totals
-            const totalsColorsMapping = getHeaderColorMapping(Object.values(totals));
             
             ["yourScore", "yourCompiteiter1", "yourCompiteiter2"].forEach(column => {
-                if (totalsColorsMapping[totals[column]]) {
-                    totals[`${column}TextColor`] = totalsColorsMapping[totals[column]].textColor;
-                    totals[`${column}BgColor`] = totalsColorsMapping[totals[column]].bgColor;
-                }
+                
+                    totals[`${column}TextColor`] = 'rgb(15, 42, 61)';
+                    totals[`${column}BgColor`] = 'rgb(15, 42, 61)';
+                
             });
             
             // Process details

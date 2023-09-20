@@ -40,17 +40,14 @@ async function generatePDF(param1) {
 
   const response = apiResponse.data;
   const tableData = handleTableData(response);
-  const overallPerformance = response.records.find(item => item.fields.Name === "Overall Performance");
   const companyRecord = response.records.find(item => item.fields.Tags.includes('CompanyName'));
 
   const templateData = {
     companyRecord,
-    overallPerformance,
     tableData
   }
 
   preprocessDataForColors(templateData.tableData, 'tableData');
-  preprocessDataForColors(templateData.overallPerformance)
   
   const templateContent = fs.readFileSync(__dirname + '/template.handlebars', 'utf8');
   const template = Handlebars.compile(templateContent);
