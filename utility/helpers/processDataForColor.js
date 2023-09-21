@@ -13,7 +13,6 @@ const preprocessDataForColors = (data, type='body') => {
         const filteredValues = values.filter(v => v !== undefined && v !== null);
         const uniqueValues = [...new Set(filteredValues)];
         const colorMapping = uniqueValues.reduce((acc, value) => {
-            console.log({value});
             if (value === 'Partial') {
                 acc[value] = {
                     textColor: 'rgb(255, 190, 0)',
