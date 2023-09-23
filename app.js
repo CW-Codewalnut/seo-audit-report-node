@@ -11,9 +11,10 @@ app.get('/', (req, res) => {
 
 app.get('/generate-pdf', async (req, res) => {
   try {
-    const pdfBuffer = await generatePDF(req.query.queryParam1);
+    const queryParam1 = req.query.queryParam1;
+    const pdfBuffer = await generatePDF(queryParam1);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=generated.pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=${queryParam1}.pdf`);
     res.send(pdfBuffer);
   } catch (error) {
     console.error('Error generating PDF:', error);

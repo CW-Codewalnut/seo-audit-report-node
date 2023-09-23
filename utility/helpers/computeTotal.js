@@ -1,6 +1,6 @@
-const calculateValue = (value) => {
-    value = value.toLowerCase(); // Normalize the input value
-    switch (value) {
+const calculateValue = (inputValue) => {
+    const normalizedValue = inputValue.toLowerCase();
+    switch (normalizedValue) {
         case 'yes':
             return 20;
         case 'partial':
@@ -8,32 +8,28 @@ const calculateValue = (value) => {
         case 'no':
             return 0;
         default:
-            return isNaN(parseInt(value)) ? 0 : parseInt(value);
+            const parsedValue = parseInt(normalizedValue, 10);
+            return isNaN(parsedValue) ? 0 : parsedValue;
     }
-  };
+};
 
-  const computeTotalsForGroupedData = (groupedData) => {
-    const groupTotals = {};
-  
-    Object.keys(groupedData).forEach(tag => {
-        const items = groupedData[tag];
+const computeTotalsForGroupedData = (groupedData) => {
+    const columns = ["yourScore", "yourCompiteiter1", "yourCompiteiter2"];
 
-        // Create a dynamic structure for each tag based on the present columns
+    return Object.entries(groupedData).reduce((groupTotals, [tag, items]) => {
         groupTotals[tag] = items.reduce((totals, item) => {
-            const presentColumns = ["yourScore", "yourCompiteiter1", "yourCompiteiter2"].filter(column => item.fields[column] !== undefined);
+            const presentColumns = columns.filter(column => item.fields[column] !== undefined);
             
-            // Only perform calculations if there are two or more present columns
             if (presentColumns.length > 1) {
                 presentColumns.forEach(column => {
                     const value = item.fields[column] || "";
-                    const scoreValue = calculateValue(value);
-                    totals[column] = (totals[column] || 0) + scoreValue;
+                    totals[column] = (totals[column] || 0) + calculateValue(value);
                 });
-            }
+            }       
             return totals;
         }, {});
-    });  
-    return groupTotals;
+        return groupTotals;
+    }, {});
 };
 
 module.exports = { computeTotalsForGroupedData };

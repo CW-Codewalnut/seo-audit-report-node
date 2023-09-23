@@ -4,69 +4,81 @@ const fs = require('fs');
 const Handlebars = require('handlebars');
 const { groupTableData } = require('./utility/helpers/groupTableData');
 const {computeTotalsForGroupedData} = require("./utility/helpers/computeTotal");
-const {preprocessDataForColors} = require("./utility/helpers/processDataForColor");
+const { preprocessDataForColors } = require("./utility/helpers/processDataForColor");
+
+const API_BASE_URL = process.env.API_BASE_URL;
+const API_TOKEN = process.env.API_TOKEN;
 
 const mergeData = (totalsData, detailsData) => {
   const merged = {};
-  for (let key in totalsData) {
+  for (const key in totalsData) {
+    if (totalsData.hasOwnProperty(key)) {
       merged[key] = {
-          totals: totalsData[key],
-          details: detailsData[key]
+        totals: totalsData[key],
+        details: detailsData[key]
       };
+    }
   }
   return merged;
 };
 
 const handleTableData = (response) => {
-    const tableData = groupTableData(response);
-    const tableTotals = computeTotalsForGroupedData(tableData);
-    const structuredData = mergeData(tableTotals, tableData)
-    return structuredData;
+  const tableData = groupTableData(response);
+  const tableTotals = computeTotalsForGroupedData(tableData);
+  return mergeData(tableTotals, tableData);
 }
 
 async function generatePDF(param1) {
-    const browser = await puppeteer.launch({
-        headless: 'new', 
-        devtools: false,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  let browser;
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      devtools: false,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
+
     const page = await browser.newPage();
-    const apiToken = "patGQPJKwuQOVMt7e.daf4863d4e9da202d66a6756e14c6973131544dc28ecc3b6f2874ee97b83dfc1";
-    const apiResponse = await axios.get(`https://api.airtable.com/v0/appudPAXLHOQqak1d/${param1}`, {
-    headers: {
-      Authorization: `Bearer ${apiToken}`
-    }
-  });
 
-  const response = apiResponse.data;
-  const tableData = handleTableData(response);
-  const companyRecord = response.records.find(item => item.fields.Tags.includes('CompanyName'));
+    const { data: apiResponse } = await axios.get(`${API_BASE_URL}${param1}`, {
+      headers: {
+        Authorization: `Bearer ${API_TOKEN}`
+      }
+    });
 
-  const templateData = {
-    companyRecord,
-    tableData
+    const tableData = handleTableData(apiResponse);
+    const companyRecord = apiResponse.records.find(item => item.fields.Tags.includes('CompanyName'));
+
+    const templateData = {
+      companyRecord,
+      tableData
+    };
+
+    preprocessDataForColors(templateData.tableData);
+
+    const templateContent = fs.readFileSync(__dirname + '/template.handlebars', 'utf8');
+    const template = Handlebars.compile(templateContent);
+    await page.setContent(template(templateData));
+
+    const pdfBuffer = await page.pdf({
+      margin: {
+        top: '0px',
+        right: '0px',
+        bottom: '10px',
+        left: '0px'
+      },
+      printBackground: true,
+      format: 'A4',
+    });
+
+    return pdfBuffer;
+
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    throw error;
+
+  } finally {
+    if (browser) await browser.close();
   }
-
-  preprocessDataForColors(templateData.tableData, 'tableData');
-  
-  const templateContent = fs.readFileSync(__dirname + '/template.handlebars', 'utf8');
-  const template = Handlebars.compile(templateContent);
-  const renderedHtml = template(templateData);
-  await page.setContent(renderedHtml);
-
-  const pdfBuffer = await page.pdf({
-    margin: {
-      top: '0px',
-      right: '0px',
-      bottom: '10px',
-      left: '0px'
-    },
-    printBackground: true,
-    format: 'A4',
-  });
-
-  await browser.close();
-  return pdfBuffer;
 }
 
-module.exports = {generatePDF};
+module.exports = { generatePDF };
