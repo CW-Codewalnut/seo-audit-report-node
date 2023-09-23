@@ -4,7 +4,6 @@ import { generatePDF } from './utility/helpers/pdfGenerator';
 
 dotenv.config();
 
-console.log('--->', process.env.PORT);
 const app = express();
 const port = parseInt(process.env.PORT || '3000', 10);
 
