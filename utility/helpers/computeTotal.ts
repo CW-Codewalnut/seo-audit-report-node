@@ -1,5 +1,5 @@
 import { DetailsData } from './pdfGenerator';
-
+//my comment
 type Column = 'yourScore' | 'yourCompiteiter1' | 'yourCompiteiter2';
 
 type Totals = {
