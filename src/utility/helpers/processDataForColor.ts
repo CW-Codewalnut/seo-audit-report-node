@@ -1,16 +1,5 @@
 import { getColorMapping } from './getColorMapping';
 
-// interface DataEntry {
-//   totals: {
-//     [key: string]: any;
-//   };
-//   details: any[];
-// }
-
-// interface DataType {
-//   [key: string]: DataEntry[];
-// }
-
 const COLUMN_NAMES = ['yourScore', 'yourCompiteiter1', 'yourCompiteiter2'];
 const DEFAULT_TEXT_COLOR = 'rgb(15, 42, 61)';
 const DEFAULT_BG_COLOR = 'rgb(15, 42, 61)';

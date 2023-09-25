@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
-import { generatePDF } from './utility/helpers/pdfGenerator';
+import { generatePDF } from './src/utility/helpers/pdfGenerator';
 
 dotenv.config();
 

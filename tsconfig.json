@@ -18,6 +18,6 @@
     "sourceMap": false
     
   },
-  "include": ["*.ts", "*.js", "src/app.ts", "utility/helpers/pdfGenerator.ts"],
+  "include": ["*.ts", "*.js", "src/app.ts", "src/utility/helpers/pdfGenerator.ts"],
   "exclude": ["node_modules", "*.test.ts"],
 }

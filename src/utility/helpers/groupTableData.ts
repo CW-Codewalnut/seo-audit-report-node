@@ -1,4 +1,8 @@
-import { ApiResponse } from './pdfGenerator';
+import { ApiResponse, ApiRecord } from '../types/apiTypes';
+
+type groupedTableDataType = {
+  [category: string]: ApiRecord[];
+};
 
 export const groupTableData = (response: ApiResponse) => {
   const desiredOrder = [
@@ -10,25 +14,26 @@ export const groupTableData = (response: ApiResponse) => {
     'Trust & Authority',
     'Social Proofing',
   ];
-  const grouped: any = {};
+  const grouped: groupedTableDataType = {};
 
   desiredOrder.forEach((tag) => {
     grouped[tag] = [];
   });
 
-  response.forEach((item) => {
-    const tags = item.fields.Tags;
+  response.records.forEach((record) => {
+    const tags = record.fields.Tags;
     if (tags && tags.length > 0) {
       tags.forEach((tag) => {
         if (Object.prototype.hasOwnProperty.call(grouped, tag)) {
-          if (item.fields.Name === tag) {
-            grouped[tag].unshift(item);
+          if (record.fields.Name === tag) {
+            grouped[tag].unshift(record);
           } else {
-            grouped[tag].push(item);
+            grouped[tag].push(record);
           }
         }
       });
     }
   });
+
   return grouped;
 };

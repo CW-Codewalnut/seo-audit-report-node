@@ -4,8 +4,9 @@ import axios, { AxiosResponse } from 'axios';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import { groupTableData } from './groupTableData';
-import { computeTotalsForGroupedData } from './computeTotal';
+import { computeTotal } from './computeTotal';
 import { preprocessDataForColors } from './processDataForColor';
+import { ApiRecord, ApiResponse } from '../types/apiTypes';
 import path from 'path';
 
 dotenv.config();
@@ -13,24 +14,11 @@ dotenv.config();
 const API_BASE_URL = process.env.API_BASE_URL;
 const API_TOKEN = process.env.API_TOKEN;
 
-type ApiRecord = {
-  id: string;
-  createdTime: string;
-  fields: {
-    Name: string;
-    yourScore?: string | number;
-    yourCompiteiter1?: string | number;
-    yourCompiteiter2?: string | number;
-    Tags: string[];
-  };
-};
-
-export type ApiResponse = ApiRecord[];
-
-type ScoreDetails = {
-  yourScore: number | string;
-  yourCompiteiter1: number | string;
-  yourCompiteiter2: number | string;
+export type ScoreDetails = {
+  yourScore?: number;
+  yourCompiteiter1?: number;
+  yourCompiteiter2?: number;
+  totals?: string | number;
 };
 
 export type TotalsData = {
@@ -38,17 +26,17 @@ export type TotalsData = {
 };
 
 export type DetailsData = {
-  [category: string]: any[];
+  [category: string]: ApiRecord[];
 };
 
-export type MergedEntry = {
-  totals: any;
-  details: DetailsData[];
+type MergedData = {
+  [category: string]: {
+    totals: ScoreDetails;
+    details: ApiRecord[];
+  };
 };
 
-type MergedData = Record<string, MergedEntry>;
-
-const mergeData = (tableTotals: any, tableData: DetailsData) => {
+const mergeData = (tableTotals: TotalsData, tableData: DetailsData) => {
   const merged: MergedData = {};
 
   for (const key in tableTotals) {
@@ -62,13 +50,12 @@ const mergeData = (tableTotals: any, tableData: DetailsData) => {
       };
     }
   }
-
   return merged;
 };
 
-const handleTableData = (response: ApiResponse): MergedData => {
+const handleTableData = (response: ApiResponse) => {
   const tableData = groupTableData(response);
-  const tableTotals = computeTotalsForGroupedData(tableData);
+  const tableTotals = computeTotal(tableData);
   return mergeData(tableTotals, tableData);
 };
 
@@ -91,7 +78,7 @@ export async function generatePDF(param1: string): Promise<Buffer> {
         },
       },
     );
-    const tableData = handleTableData(apiResponse?.records);
+    const tableData = handleTableData(apiResponse);
     const companyRecord = apiResponse.records.find((item: ApiRecord) =>
       item.fields.Tags.includes('CompanyName'),
     );
@@ -107,6 +94,8 @@ export async function generatePDF(param1: string): Promise<Buffer> {
       '..',
       '..',
       '..',
+      '..',
+      'src',
       'template.handlebars',
     );
     const templateContent = fs.readFileSync(templatePath, 'utf8');
