@@ -36,8 +36,30 @@ First, install the app dependencies:
 npm install
 ```
 
+Second, Create dist folder
+
+```
+tsc
+```
+
 Then, you can run the development server with the command:
 
 ```
-npm run dev
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### Running Tests
+
+You can run the tests with the command:
+
+```
+npm run test
+```
+
+You can also run the tests in watch mode with the command:
+
+```
+npm run test:watch
 ```
