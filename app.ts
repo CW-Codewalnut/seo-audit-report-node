@@ -15,13 +15,20 @@ app.get('/', (req: Request, res: Response) => {
 
 app.get('/generate-pdf', async (req: Request, res: Response) => {
   try {
-    const queryParam1: string = req.query.queryParam1 as string;
-    const pdfBuffer = await generatePDF(queryParam1);
+    const companyName: string = req.query.companyName as string;
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+
+    // Create the desired filename
+    const fileName = `${companyName}_${formattedDate}.pdf`;
+
+    const pdfBuffer = await generatePDF(companyName);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${queryParam1}.pdf`,
-    );
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
     res.send(pdfBuffer);
   } catch (error) {
     console.error('Error generating PDF:', error);
